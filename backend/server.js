@@ -4,6 +4,7 @@ import {connectDB} from "./db.js"
 import cookieParser from "cookie-parser"
 import { app,server } from "./socket.js"
 import authRoutes from "./routes/authRoutes.js"
+import msgRoutes from "./routes/msgRoutes.js"
 
 dotenv.config()
 
@@ -13,6 +14,7 @@ app.use(cookieParser())
 
 
 app.use("/api/auth",authRoutes)
+app.use("/api/messages",msgRoutes)
 
 
 

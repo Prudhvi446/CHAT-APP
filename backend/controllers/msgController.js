@@ -1,6 +1,6 @@
-import msg from "../models/msgModel";
-import convos from "../models/convosModel";
-import { getReceiverScoketId , io } from "../socket";
+import msg from "../models/msgModel.js";
+import convos from "../models/convosModel.js";
+import { getReceiverScoketId,  io } from "../socket.js";
 export const sendMsg=async (req,res)=>{
     try {
         const {message}=req.body
@@ -29,6 +29,14 @@ export const sendMsg=async (req,res)=>{
 
         await Promise.all([conversation.save(), newMessage.save()]);
 
+        const receiverScoketId = getReceiverScoketId(receiverId)
+
+        if(receiverScoketId){
+            io.to(receiverScoketId).emit("newMessage",newMsg)
+        }
+
+        res.status(201).json(newMsg)
+
         
 
 
@@ -38,7 +46,7 @@ export const sendMsg=async (req,res)=>{
     }
 }
 
-export const getMsg= async (req,res){
+export const getMsg= async (req,res)=>{
     try {
         const {id:usetoChatId}=req.params
         const senderId=req.user._id

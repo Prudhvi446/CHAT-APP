@@ -1,16 +1,16 @@
 import mongoose, { mongo } from "mongoose";
 
-const msgSchems=new mongoose.Schema(
+const msgSchema=new mongoose.Schema(
 
     {
         senderid:{
-            tyoe:mongoose.Schema.Types.ObjectId,
-            ref:"user",
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
             required:true,
         },
         receuverid:{
-            tyoe:mongoose.Schema.Types.ObjectId,
-            ref:"user",
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
             required:true,
         },
         message:{
