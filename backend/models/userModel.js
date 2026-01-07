@@ -17,7 +17,7 @@ const userSchema=new mongoose.Schema({
     gender:{
         type:String,
         required:true,
-        enum:[male,female],
+        enum:["male","female"],
     },
     profile:{
         type:String,
@@ -28,6 +28,6 @@ const userSchema=new mongoose.Schema({
     timestamps:true
 })
 
-const user=mongoose.model("user",userSchema)
+const User=mongoose.model("user",userSchema)
 
-export default user
+export default User

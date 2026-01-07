@@ -1,8 +1,8 @@
-import bcryptjs from "bcryptjs"
-import user from "../models/userModel.js"
+import bcrypt from "bcryptjs"
+import User from "../models/userModel.js"
 import genTokenAndSetCookie from "../genToken-SetCookie.js"
-import user from "../models/userModel.js"
-import { use } from "react"
+
+
 
 export const signup =async  (req,res)=>{
     try {
@@ -11,7 +11,7 @@ export const signup =async  (req,res)=>{
             return res.status(400).json({error:"Password doesn't match"})
         }
 
-        const user=await user.findOne({username})
+        const user=await User.findOne({username})
         if(user){
             return res.status(400).json({error:"User already exist"})
         }
@@ -22,7 +22,7 @@ export const signup =async  (req,res)=>{
         const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
 		const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
-        const newUser=new user({
+        const newUser=new User({
             fullname,
             username,
             password:hashedPass,
@@ -59,7 +59,7 @@ export const signup =async  (req,res)=>{
 export const login= async (req,res)=>{
     try {
         const {username,password}=req.body
-        const user=await user.findOne({username})
+        const user=await User.findOne({username})
         const isPasswordCorrect=await bcrypt.compare(password,user?.password || "")
 
         if(!user || !isPasswordCorrect){
