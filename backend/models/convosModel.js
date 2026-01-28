@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
 const convoSchema=new mongoose.Schema({
-    participents:{
+    participents:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"user",
-    },
-    messages:{
+    }],
+    messages:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"message",
+        ref:"msg",
         default:[],
-    },
+    }],
 
 },
 

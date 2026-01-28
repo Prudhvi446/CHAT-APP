@@ -6,8 +6,8 @@ import genTokenAndSetCookie from "../genToken-SetCookie.js"
 
 export const signup =async  (req,res)=>{
     try {
-        const {fullname,username,password,confirmpassword,gender}=req.body
-        if(password!==confirmpassword){
+        const {fullName,username,password,confirmPassword,gender}=req.body
+        if(password!==confirmPassword){
             return res.status(400).json({error:"Password doesn't match"})
         }
 
@@ -23,11 +23,11 @@ export const signup =async  (req,res)=>{
 		const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
         const newUser=new User({
-            fullname,
+            fullName,
             username,
             password:hashedPass,
             gender,
-            prifile:gender==male?boyProfilePic:girlProfilePic
+            profile:gender=="male"?boyProfilePic:girlProfilePic
         })
 
         if(newUser){
@@ -37,9 +37,7 @@ export const signup =async  (req,res)=>{
 
             res.status(201).json({
                 _id:newUser._id,
-                fullname:newUser.name,
-                username:newUser.username,
-                profile:newUser.profile,
+            fullname:newUser.fullName,
             })
 
         }
@@ -66,6 +64,8 @@ export const login= async (req,res)=>{
             return res.status(400).json({error:"Invalid credentials"})
         }
 
+        genTokenAndSetCookie(user._id, res);
+
         res.status(200).json({
             _id:user._id,
             fullname:user.fullname,
@@ -82,7 +82,7 @@ export const login= async (req,res)=>{
 export const logout=(req,res)=>{
     try {
         res.cookie("jwt",{maxAge:0})
-        res.send(200).json({message:"Loggedout successfully"})
+        res.status(200).json({message:"Loggedout successfully"})
     } catch (error) {
         console.log("Error in logout controller", error.message);
 		res.status(500).json({ error: "Internal Server Error" });

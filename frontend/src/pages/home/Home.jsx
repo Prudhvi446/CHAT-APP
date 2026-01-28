@@ -1,4 +1,4 @@
-import MessageContainer from "../../components/messages/MessageContainer";
+import MessageContainer from "../../components/msgs/msgContainer";
 import Sidebar from "../../components/sidebar/Sidebar";
 
 const Home = () => {

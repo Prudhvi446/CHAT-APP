@@ -1,6 +1,6 @@
 import msg from "../models/msgModel.js";
 import convos from "../models/convosModel.js";
-import { getReceiverScoketId,  io } from "../socket.js";
+import { getReceiverSocketId,  io } from "../socket.js";
 export const sendMsg=async (req,res)=>{
     try {
         const {message}=req.body
@@ -13,13 +13,13 @@ export const sendMsg=async (req,res)=>{
 
         if(!conversation){
             conversation=await convos.create({
-                participents:{$all:[senderId,receiverId]}
+                participents:[senderId,receiverId]
             })
         }
 
         const newMsg = new msg({
-            senderId,
-            receiverId,
+            senderid: senderId,
+            receuverid: receiverId,
             message
         })
 
@@ -27,12 +27,12 @@ export const sendMsg=async (req,res)=>{
             conversation.messages.push(newMsg._id)
         }
 
-        await Promise.all([conversation.save(), newMessage.save()]);
+        await Promise.all([conversation.save(), newMsg.save()]);
 
-        const receiverScoketId = getReceiverScoketId(receiverId)
+        const receiverSocketId = getReceiverSocketId(receiverId)
 
-        if(receiverScoketId){
-            io.to(receiverScoketId).emit("newMessage",newMsg)
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage",newMsg)
         }
 
         res.status(201).json(newMsg)
@@ -52,7 +52,7 @@ export const getMsg= async (req,res)=>{
         const senderId=req.user._id
 
         const conversation=await convos.findOne({
-            participents:{$all:[senderId,receiverId]}
+            participents:{$all:[senderId,usetoChatId]}
         }).populate("messages")
 
         if(!conversation){
